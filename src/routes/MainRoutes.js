@@ -28,6 +28,8 @@ const MainRoutes = () => {
             path={[
                 '/dashboard/default',
 
+                '/utils/util-user',
+                '/utils/util-post',
                 '/utils/util-typography',
                 '/utils/util-color',
                 '/utils/util-shadow',
@@ -40,6 +42,9 @@ const MainRoutes = () => {
             <MainLayout>
                 <Switch location={location} key={location.pathname}>
                     <Route path="/dashboard/default" component={DashboardDefault} />
+
+                    <Route path="/utils/util-user" component={UtilsTypography} />
+                    <Route path="/utils/util-post" component={UtilsTablerIcons} />
 
                     <Route path="/utils/util-typography" component={UtilsTypography} />
                     <Route path="/utils/util-color" component={UtilsColor} />
