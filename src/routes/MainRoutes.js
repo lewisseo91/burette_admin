@@ -18,6 +18,9 @@ const UtilsTablerIcons = Loadable(lazy(() => import('../views/utilities/TablerIc
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
 
+// user page
+const UserPage = Loadable(lazy(() => import('../views/pages/main-pages/UserPage')));
+
 //-----------------------|| MAIN ROUTING ||-----------------------//
 
 const MainRoutes = () => {
@@ -30,6 +33,7 @@ const MainRoutes = () => {
 
                 '/utils/util-user',
                 '/utils/util-post',
+
                 '/utils/util-typography',
                 '/utils/util-color',
                 '/utils/util-shadow',
@@ -43,7 +47,7 @@ const MainRoutes = () => {
                 <Switch location={location} key={location.pathname}>
                     <Route path="/dashboard/default" component={DashboardDefault} />
 
-                    <Route path="/utils/util-user" component={UtilsTypography} />
+                    <Route path="/utils/util-user" component={UserPage} />
                     <Route path="/utils/util-post" component={UtilsTablerIcons} />
 
                     <Route path="/utils/util-typography" component={UtilsTypography} />
