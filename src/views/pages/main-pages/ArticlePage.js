@@ -6,8 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import UserBoard from './UserBoard';
-import UserRegistration from './UserRegistration';
+import ArticleBoard from './ArticleBoard';
+import ArticleRegistration from './ArticleRegistration';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const UserPage = () => {
+const ArticlePage = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -69,18 +69,18 @@ const UserPage = () => {
             textColor="secondary"
             onChange={handleChange} 
             aria-label="simple tabs">
-          <Tab className={classes.tab_title} label="유저 관리" {...a11yProps(0)} />
-          <Tab className={classes.tab_title} label="유저 등록" {...a11yProps(1)} />
+          <Tab className={classes.tab_title} label="기사 관리" {...a11yProps(0)} />
+          <Tab className={classes.tab_title} label="기사 등록" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <UserBoard></UserBoard>
+          <ArticleBoard />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <UserRegistration></UserRegistration>
+          <ArticleRegistration />
       </TabPanel>
     </div>
   );
 }
 
-export default UserPage;
+export default ArticlePage;

@@ -21,6 +21,9 @@ const SamplePage = Loadable(lazy(() => import('../views/sample-page')));
 // user page
 const UserPage = Loadable(lazy(() => import('../views/pages/main-pages/UserPage')));
 
+// article page
+const ArticlePage = Loadable(lazy(() => import('../views/pages/main-pages/ArticlePage')));
+
 //-----------------------|| MAIN ROUTING ||-----------------------//
 
 const MainRoutes = () => {
@@ -48,7 +51,7 @@ const MainRoutes = () => {
                     <Route path="/dashboard/default" component={DashboardDefault} />
 
                     <Route path="/utils/util-user" component={UserPage} />
-                    <Route path="/utils/util-post" component={UtilsTablerIcons} />
+                    <Route path="/utils/util-post" component={ArticlePage} />
 
                     <Route path="/utils/util-typography" component={UtilsTypography} />
                     <Route path="/utils/util-color" component={UtilsColor} />
