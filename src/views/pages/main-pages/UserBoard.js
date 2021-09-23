@@ -143,8 +143,8 @@ const UserBoard = () => {
   
   const [state, refetch] = useAsync(getUsers, []);
   const { loading, data: users, error } = state; // state.data 를 users 키워드로 조회
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  console.log(state);
+  console.log(users);
 
   if (loading) return (
     <div>로딩중...</div>
@@ -158,6 +158,8 @@ const UserBoard = () => {
     <div>결과가 없습니다.</div>
   )
 
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="custom pagination table">
@@ -170,18 +172,18 @@ const UserBoard = () => {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : users
           ).map((row) => (
-            <TableRow key={row.name}>
+            <TableRow key={row.userId}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.userId}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
-                {row.calories}
+                {row.email}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
-                {row.fat}
+                {row.phoneNumber}
               </TableCell>
             </TableRow>
           ))}
@@ -197,7 +199,7 @@ const UserBoard = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              count={rows.length}
+              count={users.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
