@@ -4,7 +4,23 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
+import axios from 'axios';
 import parse from 'html-react-parser';
+
+async function postArticle(data) {
+  // 예제
+  const config = {
+    headers: { Authorization : 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjMxMjMiLCJpYXQiOjE2MzI1NzkxMDMsImV4cCI6MTYzNTE3MTEwM30.FZmVZfC3H_IFtbTGALV6559Igt0EVLNvxLnwzuK9u48'}
+  }
+
+  const response = await axios.post(
+    'http://localhost:8090/article/create',
+    data,
+    config
+  );
+
+  return response.data;
+}
 
 const ArticleRegistration = () => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
@@ -23,15 +39,18 @@ const ArticleRegistration = () => {
     setState({...state, title : e.target.value});
   }
 
-  const onSubmit = () => {
-    console.log(convertToRaw(editorState.getCurrentContent()));
-    console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
-    console.log(editorState.getCurrentContent().getPlainText());
+  const onSubmit = async () => {
+    // console.log(convertToRaw(editorState.getCurrentContent()));
+    // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
+    // console.log(editorState.getCurrentContent().getPlainText());
     const text = editorState.getCurrentContent().getPlainText();
     const pattern = /\B(\#[0-9a-zA-Z_]+\b)(?!;)/g;
     const hashtags = text.match(pattern);
-    console.log(state);
-    console.log(hashtags);
+    const data = {title: state.title, contents : previewState.previewHtml, tags: hashtags};
+    let result = await postArticle(data);
+    console.log(result);
+    // console.log(state);
+    // console.log(hashtags);
   }
 
   return (

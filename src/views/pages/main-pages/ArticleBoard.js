@@ -83,27 +83,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(name, calories, fat) {
-  return { name, calories, fat };
-}
-
-const rows = [
-  createData('Cupcake', 305, 3.7),
-  createData('Donut', 452, 25.0),
-  createData('Eclair', 262, 16.0),
-  createData('Frozen yoghurt', 159, 6.0),
-  createData('Gingerbread', 356, 16.0),
-  createData('Honeycomb', 408, 3.2),
-  createData('Ice cream sandwich', 237, 9.0),
-  createData('Jelly Bean', 375, 0.0),
-  createData('KitKat', 518, 26.0),
-  createData('Lollipop', 392, 0.2),
-  createData('Marshmallow', 318, 0),
-  createData('Nougat', 360, 19.0),
-  createData('Oreo', 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
-
 const StyledTableCell = withStyles((theme) => ({
     head: {
       backgroundColor: theme.palette.common.black,
@@ -122,7 +101,7 @@ const useStyles2 = makeStyles({
 
 async function getArticles() {
   const response = await axios.get(
-    'http://localhost:8092/article/articles'
+    'http://localhost:8090/article/articles'
   );
   return response.data;
 }
@@ -142,9 +121,7 @@ const ArticleBoard = () => {
   };
   
   const [state, refetch] = useAsync(getArticles, []);
-  const { loading, data: users, error } = state; // state.data 를 users 키워드로 조회
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const { loading, data: articles, error } = state; // state.data 를 users 키워드로 조회
 
   if (loading) return (
     <div>로딩중...</div>
@@ -154,34 +131,36 @@ const ArticleBoard = () => {
     <div>에러가 발생했습니다.</div>
   )
 
-  if (!users) return (
+  if (!articles) return (
     <div>결과가 없습니다.</div>
   )
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, articles.length - page * rowsPerPage);
 
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+            <StyledTableCell>id</StyledTableCell>
+            <StyledTableCell align="right">tags</StyledTableCell>
+            <StyledTableCell align="right">contents</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
+            ? articles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : articles
           ).map((row) => (
-            <TableRow key={row.name}>
+            <TableRow key={row.id}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.title}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
-                {row.calories}
+                {row.tags}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
-                {row.fat}
+                {row.contents}
               </TableCell>
             </TableRow>
           ))}
@@ -197,7 +176,7 @@ const ArticleBoard = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              count={rows.length}
+              count={articles.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{

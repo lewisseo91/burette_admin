@@ -11,7 +11,6 @@ import useAsync from '../../../hooks/useAsync';
 
 
 async function postUser(data) {
-  console.log("hit");
   const response = await axios.post(
     'http://localhost:8091/user/create',
     data
