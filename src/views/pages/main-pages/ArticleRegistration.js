@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { FormControl, Grid, InputLabel, Input, FormHelperText, Button, Box } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, Input, FormHelperText, Button, Box, Select, MenuItem } from '@material-ui/core';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import axios from 'axios';
 import parse from 'html-react-parser';
+import useAsync from '../../../hooks/useAsync';
 
 async function postArticle(data) {
   // 예제
@@ -22,11 +23,18 @@ async function postArticle(data) {
   return response.data;
 }
 
+async function getCategories() {
+  const response = await axios.get(
+    'http://localhost:8090/category/categories'
+  );
+  return response.data;
+}
+
 const ArticleRegistration = () => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
   // EditorState의 비어있는 ContentState 기본 구성으로 새 개체를 반환 => 이렇게 안하면 상태 값을 나중에 변경할 수 없음.
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [state, setState] = useState({title : ""});
+  const [state, setState] = useState({title : "", categoryId : ""});
   const [previewState, setPreviewState] = useState({previewHtml : ""});
 
   const onEditorStateChange = (editorState) => {
@@ -34,6 +42,10 @@ const ArticleRegistration = () => {
     setEditorState(editorState);
     previewState.previewHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
   };
+
+  const onChangeCategory = (e) => {
+    setState({...state, categoryId : e.target.value});
+  }
 
   const onChangeTitle = (e) => {
     setState({...state, title : e.target.value});
@@ -46,17 +58,62 @@ const ArticleRegistration = () => {
     const text = editorState.getCurrentContent().getPlainText();
     const pattern = /\B(\#[0-9a-zA-Z_]+\b)(?!;)/g;
     const hashtags = text.match(pattern);
-    const data = {title: state.title, contents : previewState.previewHtml, tags: hashtags};
+    const data = {title: state.title, contents : previewState.previewHtml, tags: hashtags, categoryId : state.categoryId ? state.categoryId : 0};
+    console.log(data);
     let result = await postArticle(data);
     console.log(result);
     // console.log(state);
     // console.log(hashtags);
   }
+  
+  const [categoryState, refetch] = useAsync(getCategories, []);
+  const { categoryLoading, data: categories, categoryError } = categoryState; // state.data 를 users 키워드로 조회
+
+  console.log(state);
+
+  if (categoryLoading) return (
+    <div>로딩중...</div>
+  )
+
+  if (categoryError) return (
+    <div>에러가 발생했습니다.</div>
+  )
+
+  if (!categories) return (
+    <div>결과가 없습니다.</div>
+  )
+
+  console.log(categories);
 
   return (
     <Grid container>
       <Grid item xs={12}>
-          <FormControl fullWidth sx={ {mt : 1} }>
+        <FormControl fullWidth sx={ {mt : 3} }>
+          <InputLabel shrink htmlFor="select-category" sx={ {background: "#ffffff"} }>
+            Category
+          </InputLabel>
+          <Select
+            value={state.categoryId}
+            onChange={onChangeCategory}
+            label="Category"
+            inputProps={{
+              id: 'select-multiple-native',
+            }}
+            sx={ {background: "#ffffff"} }
+          >
+            <MenuItem value="">
+              None
+            </MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12}>
+          <FormControl fullWidth sx={ {mt : 3} }>
             <InputLabel htmlFor="article-title">title</InputLabel>
             <Input autoFocus id="article-title" aria-describedby="article-title-text" value={state.title} onChange={onChangeTitle} />
             {/* <FormHelperText id="user-id-text">We'll never share your id.</FormHelperText> */}

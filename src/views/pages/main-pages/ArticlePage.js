@@ -7,6 +7,8 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import ArticleBoard from './ArticleBoard';
 import ArticleRegistration from './ArticleRegistration';
+import CategoryBoard from './CategoryBoard';
+import CategoryRegistration from './CategoryRegistration';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -70,6 +72,8 @@ const ArticlePage = () => {
             aria-label="simple tabs">
           <Tab className={classes.tab_title} label="기사 관리" {...a11yProps(0)} />
           <Tab className={classes.tab_title} label="기사 등록" {...a11yProps(1)} />
+          <Tab className={classes.tab_title} label="카테고리 관리" {...a11yProps(2)} />
+          <Tab className={classes.tab_title} label="카테고리 등록" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -77,6 +81,12 @@ const ArticlePage = () => {
       </TabPanel>
       <TabPanel value={value} index={1}>
           <ArticleRegistration />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+          <CategoryBoard />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+          <CategoryRegistration />
       </TabPanel>
     </div>
   );
