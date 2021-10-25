@@ -17,6 +17,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import axios from 'axios';
 import useAsync from '../../../hooks/useAsync';
+import parse from 'html-react-parser';
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -143,6 +144,7 @@ const ArticleBoard = () => {
         <TableHead>
           <TableRow>
             <StyledTableCell>id</StyledTableCell>
+            <StyledTableCell align="right">categoryId</StyledTableCell>
             <StyledTableCell align="right">tags</StyledTableCell>
             <StyledTableCell align="right">contents</StyledTableCell>
           </TableRow>
@@ -157,10 +159,13 @@ const ArticleBoard = () => {
                 {row.title}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
+                {row.categoryId}
+              </TableCell>
+              <TableCell style={{ width: 160 }} align="right">
                 {row.tags}
               </TableCell>
               <TableCell style={{ width: 160 }} align="right">
-                {row.contents}
+                {parse(row.contents)}
               </TableCell>
             </TableRow>
           ))}

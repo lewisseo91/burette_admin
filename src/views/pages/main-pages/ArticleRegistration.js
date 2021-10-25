@@ -5,13 +5,12 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import axios from 'axios';
-import parse from 'html-react-parser';
 import useAsync from '../../../hooks/useAsync';
 
 async function postArticle(data) {
   // 예제
   const config = {
-    headers: { Authorization : 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjMxMjMiLCJpYXQiOjE2MzI1NzkxMDMsImV4cCI6MTYzNTE3MTEwM30.FZmVZfC3H_IFtbTGALV6559Igt0EVLNvxLnwzuK9u48'}
+    headers: { Authorization : 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMxMjMxMjMiLCJpYXQiOjE2MzUxNTAxODMsImV4cCI6MTYzNzc0MjE4M30.S3bhS2a0FKw9i6cn3Ans3eUXBfRtTaMwn58XN-2mWyE'}
   }
 
   const response = await axios.post(
@@ -69,7 +68,7 @@ const ArticleRegistration = () => {
   const [categoryState, refetch] = useAsync(getCategories, []);
   const { categoryLoading, data: categories, categoryError } = categoryState; // state.data 를 users 키워드로 조회
 
-  console.log(state);
+  // console.log(state);
 
   if (categoryLoading) return (
     <div>로딩중...</div>
@@ -83,7 +82,7 @@ const ArticleRegistration = () => {
     <div>결과가 없습니다.</div>
   )
 
-  console.log(categories);
+  // console.log(categories);
 
   return (
     <Grid container>
